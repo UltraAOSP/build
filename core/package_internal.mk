@@ -493,6 +493,18 @@ framework_res_package_export := \
 else # LOCAL_SDK_RES_VERSION
 framework_res_package_export := \
     $(call intermediates-dir-for,APPS,framework-res,,COMMON)/package-export.apk
+
+# Avoid possible circular dependency with our framework
+ifneq ($(LOCAL_IGNORE_SUBDIR), true)
+aost_framework_res_package_export := \
+    $(call intermediates-dir-for,APPS,org.aost.framework-res,,COMMON)/package-export.apk
+endif #LOCAL_IGNORE_SUBDIR
+
+ifneq ($(LOCAL_IGNORE_SUBDIR), true)
+aost_framework_res_package_export_deps := \
+    $(dir $(aost_framework_res_package_export))src/R.stamp
+endif # LOCAL_IGNORE_SUBDIR
+
 endif # LOCAL_SDK_RES_VERSION
 endif # LOCAL_NO_STANDARD_LIBRARIES
 
@@ -505,6 +517,14 @@ all_library_res_package_export_deps := \
     $(framework_res_package_export) \
     $(foreach lib,$(LOCAL_RES_LIBRARIES),\
         $(call intermediates-dir-for,APPS,$(lib),,COMMON)/src/R.stamp)
+
+ifneq ($(LOCAL_IGNORE_SUBDIR), true)
+all_library_res_package_exports += \
+    $(aost_framework_res_package_export)
+all_library_res_package_export_deps += \
+    $(aost_framework_res_package_export_deps)
+endif # LOCAL_IGNORE_SUBDIR
+
 $(resource_export_package) $(R_file_stamp) $(LOCAL_BUILT_MODULE): $(all_library_res_package_export_deps)
 $(LOCAL_INTERMEDIATE_TARGETS): \
     PRIVATE_AAPT_INCLUDES := $(all_library_res_package_exports)
