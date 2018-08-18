@@ -1096,4 +1096,11 @@ include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
 
+ifneq ($(AOST_BUILD),)
+
+# Include any vendor specific config.mk file
+include $(TOPDIR)vendor/aost/build/core/config.mk
+
+endif
+
 include $(BUILD_SYSTEM)/dumpvar.mk
