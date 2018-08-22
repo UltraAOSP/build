@@ -63,6 +63,6 @@ echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
 echo "org.aost.device=$AOST_BUILD"
 
-echo "org.aost.build_date=`$DATE +%s`"
+echo "org.aost.build_date=`$DATE`"
 
 echo "# end build properties"
